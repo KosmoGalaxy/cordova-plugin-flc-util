@@ -5,7 +5,10 @@ module.exports = {
   decodeImage: function(successCallback, errorCallback, args) {
     try {
       const bytes = args[0];
-      component.decodeImage(bytes).then(successCallback, errorCallback);
+      component.decodeImage(bytes).then(
+        data => successCallback(Uint8Array.from(data).buffer),
+        errorCallback
+      );
     } catch (e) { errorCallback(e) }
   },
 
