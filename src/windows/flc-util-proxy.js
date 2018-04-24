@@ -4,9 +4,10 @@ module.exports = {
 
   decodeImage: function(successCallback, errorCallback, args) {
     try {
-      const bytes = args[0];
-      console.log('[FlcUtil.decodeImage] bytes', bytes);
-      component.decodeImage(bytes).then(
+      const buffer = args[0];
+      const bytes = new Uint8Array(buffer);
+      const array = Array.prototype.slice.call(bytes, 0, bytes.length);
+      component.decodeImage(array).then(
         data => successCallback(Uint8Array.from(data).buffer),
         errorCallback
       );
