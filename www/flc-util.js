@@ -2,6 +2,16 @@ const exec = require('cordova/exec');
 
 function FlcUtil() {}
 
+FlcUtil.setDebug = function(value) {
+  exec(
+    function() {},
+    function() {},
+    'FlcUtil',
+    'setDebug',
+    [value]
+  );
+};
+
 FlcUtil.acquireWakeLock = function(a, b, c) {
   if (a !== null && typeof a !== 'number') {
     FlcUtil.acquireWakeLock(null, a, b);
