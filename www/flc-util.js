@@ -63,12 +63,8 @@ FlcUtil.setKeepScreenOn = function(value, successCallback, errorCallback) {
 };
 
 FlcUtil.decodeImage = function(buffer, successCallback, errorCallback) {
-  const startTime = Date.now();
-  console.log('[FlcUtil.decodeImage] start (time)=' + startTime);
   exec(
     function(buffer) {
-      const endTime = Date.now();
-      console.log(`[FlcUtil.decodeImage] end (time)=${endTime} (time delta)=${endTime - startTime}`);
       if (successCallback) {
         successCallback(buffer);
       }
@@ -98,6 +94,24 @@ FlcUtil.getIp = function(successCallback, errorCallback) {
     },
     'FlcUtil',
     'getIp'
+  );
+};
+
+FlcUtil.test = function(value, successCallback, errorCallback) {
+  exec(
+    function(result) {
+      if (successCallback) {
+        successCallback(result);
+      }
+    },
+    function(error) {
+      if (errorCallback) {
+        errorCallback(error);
+      }
+    },
+    'FlcUtil',
+    'test',
+    [value]
   );
 };
 
