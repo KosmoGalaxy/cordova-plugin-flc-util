@@ -107,6 +107,23 @@ FlcUtil.getIp = function(successCallback, errorCallback) {
   );
 };
 
+FlcUtil.getUuid = function(successCallback, errorCallback) {
+  exec(
+    function(uuid) {
+      if (successCallback) {
+        successCallback(uuid);
+      }
+    },
+    function(error) {
+      if (errorCallback) {
+        errorCallback(error);
+      }
+    },
+    'FlcUtil',
+    'getUuid'
+  );
+};
+
 FlcUtil.test = function(value, successCallback, errorCallback) {
   exec(
     function(result) {

@@ -51,4 +51,12 @@ import Foundation
     })
   }
   
+  @objc(getUuid:) func getUuid(command: CDVInvokedUrlCommand) {
+    let uuid = FlcUtil.getUuid()
+    let result = uuid != ""
+    ? CDVPluginResult(status: CDVCommandStatus_OK, messageAs: uuid)
+    : CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: "could not resolve uuid")
+    self.commandDelegate!.send(result, callbackId: command.callbackId)
+  }
+  
 }

@@ -40,4 +40,38 @@ class FlcUtil {
     return Data(bytes: pixelData)
   }
   
+  static func getUuid() -> String {
+//    let clearQuery: [String: Any] = [kSecClass as String: kSecClassGenericPassword]
+//    SecItemDelete(clearQuery as CFDictionary)
+    
+    let query: [String: Any] = [
+      kSecClass as String: kSecClassGenericPassword,
+      kSecAttrService as String: "uuid",
+      kSecMatchLimit as String: kSecMatchLimitOne,
+      kSecReturnAttributes as String: true,
+      kSecReturnData as String: true
+    ]
+    var queryResult: AnyObject?
+    let status = SecItemCopyMatching(query as CFDictionary, &queryResult)
+    
+    if status == errSecSuccess {
+      let result = queryResult as! [String: Any]
+      let data = result[kSecValueData as String] as! Data
+      return String(data: data, encoding: .utf8)!
+    }
+    
+    if status == errSecItemNotFound {
+      let uuid = UIDevice.current.identifierForVendor?.uuidString
+      let query: [String: Any] = [
+        kSecClass as String: kSecClassGenericPassword,
+        kSecAttrService as String: "uuid",
+        kSecValueData as String: uuid!.data(using: .utf8)!
+      ]
+      SecItemAdd(query as CFDictionary, nil)
+      return uuid!
+    }
+    
+    return "";
+  }
+  
 }
