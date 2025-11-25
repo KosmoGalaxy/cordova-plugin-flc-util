@@ -142,5 +142,31 @@ FlcUtil.test = function(value, successCallback, errorCallback) {
   );
 };
 
+FlcUtil.exoCreate = function(uri, successCallback, errorCallback) {
+  exec(
+    function(event) {
+      successCallback(event);
+    },
+    function(error) {
+      errorCallback(error);
+    },
+    'FlcUtil',
+    'exoCreate',
+    [uri]
+  )
+};
+
+FlcUtil.exoDispose = function(id) {
+  exec(
+    function() {
+    },
+    function() {
+    },
+    'FlcUtil',
+    'exoDispose',
+    [id]
+  )
+};
+
 module.exports = FlcUtil;
 

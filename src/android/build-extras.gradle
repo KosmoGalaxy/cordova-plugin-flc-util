@@ -1,0 +1,27 @@
+// 1. Tell Gradle to look for dependencies in the 'libs' folder
+repositories {
+    flatDir {
+        dirs 'libs', 'src/main/libs'
+    }
+}
+
+dependencies {
+    // 2. Load the JAR file
+    implementation files('src/main/libs/audio360.jar')
+    implementation files('src/main/libs/audio360-exo.jar')
+    implementation files('src/main/libs/guava-31.0.1-android.jar')
+
+    // 3. Load the AAR file (Note: name without extension)
+    implementation(name: 'flcexoplayer-controller', ext: 'aar')
+    implementation(name: 'media3-common-1.0.0', ext: 'aar')
+    implementation(name: 'media3-database-1.0.0', ext: 'aar')
+    implementation(name: 'media3-datasource-1.0.0', ext: 'aar')
+    implementation(name: 'media3-decoder-1.0.0', ext: 'aar')
+    implementation(name: 'media3-exoplayer-1.0.0', ext: 'aar')
+    implementation(name: 'media3-exoplayer-dash-1.0.0', ext: 'aar')
+    implementation(name: 'media3-exoplayer-hls-1.0.0', ext: 'aar')
+    implementation(name: 'media3-exoplayer-rtsp-1.0.0', ext: 'aar')
+    implementation(name: 'media3-exoplayer-smoothstreaming-1.0.0', ext: 'aar')
+    implementation(name: 'media3-extractor-1.0.0', ext: 'aar')
+    implementation(name: 'sdk-base-1.190.0', ext: 'aar')
+}
