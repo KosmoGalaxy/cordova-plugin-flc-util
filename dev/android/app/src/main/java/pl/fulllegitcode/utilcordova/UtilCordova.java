@@ -25,6 +25,7 @@ public class UtilCordova extends CordovaPlugin {
   public static final String ACTION_EXO_CREATE = "exoCreate";
   public static final String ACTION_EXO_DISPOSE = "exoDispose";
   public static final String ACTION_EXO_GET_FRAME = "exoGetFrame";
+  public static final String ACTION_EXO_SET_PLAYING = "exoSetPlaying";
 
   private final ArrayList<Exo> exos = new ArrayList<Exo>();
 
@@ -59,11 +60,32 @@ public class UtilCordova extends CordovaPlugin {
           String uri = args.getString(0);
           exo = new Exo(activity, threadPool, uri, new Exo.Callback() {
             @Override
+            public void onDispose() {
+              PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT);
+              result.setKeepCallback(false);
+              callbackContext.sendPluginResult(result);
+            }
+
+            @Override
             public void onError(int error) {
               try {
                 JSONObject event = new JSONObject();
                 event.put("type", "error");
                 event.put("error", error);
+                PluginResult result = new PluginResult(PluginResult.Status.OK, event);
+                result.setKeepCallback(true);
+                callbackContext.sendPluginResult(result);
+              } catch (JSONException ignored) {
+              }
+            }
+
+            @Override
+            public void onImageAvailable(int width, int height) {
+              try {
+                JSONObject event = new JSONObject();
+                event.put("type", "imageAvailable");
+                event.put("width", width);
+                event.put("height", height);
                 PluginResult result = new PluginResult(PluginResult.Status.OK, event);
                 result.setKeepCallback(true);
                 callbackContext.sendPluginResult(result);
@@ -102,14 +124,56 @@ public class UtilCordova extends CordovaPlugin {
       return true;
     }
     if (action.equals(ACTION_EXO_DISPOSE)) {
-      Exo exo = getExo(args.getInt(0));
-      if (exo != null) {
-        exo.dispose();
-        exos.remove(exo);
-        callbackContext.success();
-      } else {
-        callbackContext.error("exo not found");
-      }
+      activity.runOnUiThread(() -> {
+        try {
+          Exo exo = getExo(args.getInt(0));
+          if (exo != null) {
+            exo.dispose();
+            exos.remove(exo);
+            callbackContext.success();
+          } else {
+            callbackContext.error("exo not found");
+          }
+        } catch (Exception e) {
+          callbackContext.error(e.getMessage());
+        }
+      });
+      return true;
+    }
+    if (action.equals(ACTION_EXO_GET_FRAME)) {
+      activity.runOnUiThread(() -> {
+        try {
+          Exo exo = getExo(args.getInt(0));
+          if (exo != null) {
+            byte[] data = exo.getFrame();
+            if (data != null)
+              callbackContext.success(data);
+            else
+              callbackContext.success(0);
+          } else {
+            callbackContext.error("exo not found");
+          }
+        } catch (Exception e) {
+          callbackContext.error(e.getMessage());
+        }
+      });
+      return true;
+    }
+    if (action.equals(ACTION_EXO_SET_PLAYING)) {
+      activity.runOnUiThread(() -> {
+        try {
+          Exo exo = getExo(args.getInt(0));
+          if (exo != null) {
+            boolean playing = args.getBoolean(1);
+            exo.setPlaying(playing);
+            callbackContext.success();
+          } else {
+            callbackContext.error("exo not found");
+          }
+        } catch (Exception e) {
+          callbackContext.error(e.getMessage());
+        }
+      });
       return true;
     }
     return false;

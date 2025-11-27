@@ -145,10 +145,12 @@ FlcUtil.test = function(value, successCallback, errorCallback) {
 FlcUtil.exoCreate = function(uri, successCallback, errorCallback) {
   exec(
     function(event) {
-      successCallback(event);
+      if (successCallback)
+        successCallback(event);
     },
     function(error) {
-      errorCallback(error);
+      if (errorCallback)
+        errorCallback(error);
     },
     'FlcUtil',
     'exoCreate',
@@ -156,15 +158,51 @@ FlcUtil.exoCreate = function(uri, successCallback, errorCallback) {
   )
 };
 
-FlcUtil.exoDispose = function(id) {
+FlcUtil.exoDispose = function(id, successCallback, errorCallback) {
   exec(
     function() {
+      if (successCallback)
+        successCallback();
     },
-    function() {
+    function(error) {
+      if (errorCallback)
+        errorCallback(error);
     },
     'FlcUtil',
     'exoDispose',
     [id]
+  )
+};
+
+FlcUtil.exoGetFrame = function(id, successCallback, errorCallback) {
+  exec(
+    function(result) {
+      if (successCallback)
+        successCallback(result);
+    },
+    function(error) {
+      if (errorCallback)
+        errorCallback(error);
+    },
+    'FlcUtil',
+    'exoGetFrame',
+    [id]
+  )
+};
+
+FlcUtil.exoSetPlaying = function(id, playing, successCallback, errorCallback) {
+  exec(
+    function() {
+      if (successCallback)
+        successCallback();
+    },
+    function(error) {
+      if (errorCallback)
+        errorCallback(error);
+    },
+    'FlcUtil',
+    'exoSetPlaying',
+    [id, playing]
   )
 };
 
