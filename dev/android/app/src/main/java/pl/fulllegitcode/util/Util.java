@@ -10,10 +10,12 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.PowerManager;
 import android.util.Log;
+import android.os.Environment;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.io.File;
 
 import static android.content.Context.WIFI_SERVICE;
 
@@ -143,6 +145,27 @@ public class Util {
     result.granted = granted.toArray(new String[0]);
     result.denied = denied.toArray(new String[0]);
     return result;
+  }
+
+  public static String getExternalFilesDirs(Context context) {
+    File[] dirs = context.getExternalFilesDirs(null);
+    for (File dir : dirs) {
+      if (Environment.isExternalStorageRemovable(dir)) {
+        return getRootPath(dir.getAbsolutePath());
+      }
+    }
+    return null;
+  }
+
+  public static String getRootPath(String fullPath) {
+    if (fullPath == null || fullPath.isEmpty()) {
+      return null;
+    }
+    int androidIndex = fullPath.toLowerCase().indexOf("/android");
+    if (androidIndex > 0) {
+      return fullPath.substring(0, androidIndex);
+    }
+    return null;
   }
 
   //endregion
